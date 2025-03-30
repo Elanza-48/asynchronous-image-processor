@@ -1,0 +1,218 @@
+
+x-logging:
+  &default-logging
+  driver: "json-file"
+  options:
+    max-size: "150m"
+    max-file: "3"
+
+services:
+  kafka1:
+    image: confluentinc/cp-kafka:7.8.0
+    restart: unless-stopped
+    hostname: kafka1
+    container_name: kafka1
+    networks:
+      - kafka-stack
+    ports:
+      - "9092:9092"
+      - "1101:1101"
+    volumes:
+      - kafka1_logs:/var/lib/kafka/data
+      - ./config/jaas/kafka_server_jaas.conf:/etc/kafka/kafka_server_jaas.conf:ro
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_BROKER_ID: 1
+      CLUSTER_ID: niOZU8S4RfOKd3O6q5HnyA
+      KAFKA_KRAFT_MODE: "true"
+      KAFKA_PROCESS_ROLES: "controller,broker"
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:SASL_PLAINTEXT,CONTROLLER:PLAINTEXT
+      KAFKA_LISTENERS: INTERNAL://kafka1:19092,EXTERNAL://:9092,CONTROLLER://kafka1:29092
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka1:19092,EXTERNAL://localhost:9092
+      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@kafka1:29092,2@kafka2:29093,3@kafka3:29094"
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_SASL_MECHANISM_INTER_BROKER_PROTOCOL: PLAIN
+      KAFKA_SASL_ENABLED_MECHANISMS: PLAIN
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
+      KAFKA_LOG_RETENTION_BYTES: 524288000
+      KAFKA_LOG_RETENTION_HOURS: 24
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 2
+      KAFKA_LOG_DIRS: /var/lib/kafka/data
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+      KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
+      KAFKA_ALLOW_EVERYONE_IF_NO_ACL_FOUND: "true"
+      KAFKA_OPTS: "-Djava.security.auth.login.config=/etc/kafka/kafka_server_jaas.conf"
+      KAFKA_JMX_PORT: 1101
+      KAFKA_JMX_HOSTNAME: kafka1
+      KAFKA_JMX_OPTS: >-
+        -Dcom.sun.management.jmxremote=true 
+        -Dcom.sun.management.jmxremote.local.only=false 
+        -Dcom.sun.management.jmxremote.port=1101
+        -Dcom.sun.management.jmxremote.rmi.port=1101 
+        -Dcom.sun.management.jmxremote.authenticate=false 
+        -Dcom.sun.management.jmxremote.ssl=false
+    logging: *default-logging
+
+  kafka2:
+    image: confluentinc/cp-kafka:7.8.0
+    restart: unless-stopped
+    hostname: kafka2
+    container_name: kafka2
+    networks:
+      - kafka-stack
+    ports:
+      - "9093:9093"
+      - "1102:1102"
+    volumes:
+      - kafka2_logs:/var/lib/kafka/data
+      - ./config/jaas/kafka_server_jaas.conf:/etc/kafka/kafka_server_jaas.conf:ro
+    environment:
+      KAFKA_NODE_ID: 2
+      KAFKA_BROKER_ID: 2
+      CLUSTER_ID: niOZU8S4RfOKd3O6q5HnyA
+      KAFKA_KRAFT_MODE: "true"
+      KAFKA_PROCESS_ROLES: "controller,broker"
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:SASL_PLAINTEXT,CONTROLLER:PLAINTEXT
+      KAFKA_LISTENERS: INTERNAL://kafka2:19093,EXTERNAL://:9093,CONTROLLER://kafka2:29093
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka2:19093,EXTERNAL://localhost:9093
+      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@kafka1:29092,2@kafka2:29093,3@kafka3:29094"
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_SASL_MECHANISM_INTER_BROKER_PROTOCOL: PLAIN
+      KAFKA_SASL_ENABLED_MECHANISMS: PLAIN
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
+      KAFKA_LOG_RETENTION_BYTES: 524288000
+      KAFKA_LOG_RETENTION_HOURS: 24
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 2
+      KAFKA_LOG_DIRS: /var/lib/kafka/data
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+      KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
+      KAFKA_ALLOW_EVERYONE_IF_NO_ACL_FOUND: "true"
+      KAFKA_OPTS: "-Djava.security.auth.login.config=/etc/kafka/kafka_server_jaas.conf"
+      KAFKA_JMX_PORT: 1102
+      KAFKA_JMX_HOSTNAME: kafka2
+      KAFKA_JMX_OPTS: >-
+        -Dcom.sun.management.jmxremote=true 
+        -Dcom.sun.management.jmxremote.local.only=false 
+        -Dcom.sun.management.jmxremote.port=1102
+        -Dcom.sun.management.jmxremote.rmi.port=1102
+        -Dcom.sun.management.jmxremote.authenticate=false 
+        -Dcom.sun.management.jmxremote.ssl=false
+    logging: *default-logging
+
+
+  kafka3:
+    image: confluentinc/cp-kafka:7.8.0
+    restart: unless-stopped
+    hostname: kafka3
+    container_name: kafka3
+    networks:
+      - kafka-stack
+    ports:
+      - "9094:9094"
+      - "1103:1103"
+    volumes:
+      - kafka3_logs:/var/lib/kafka/data
+      - ./config/jaas/kafka_server_jaas.conf:/etc/kafka/kafka_server_jaas.conf:ro
+    environment:
+      KAFKA_NODE_ID: 3
+      KAFKA_BROKER_ID: 3
+      CLUSTER_ID: niOZU8S4RfOKd3O6q5HnyA
+      KAFKA_KRAFT_MODE: "true"
+      KAFKA_PROCESS_ROLES: "controller,broker"
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:SASL_PLAINTEXT,CONTROLLER:PLAINTEXT
+      KAFKA_LISTENERS: INTERNAL://kafka3:19094,EXTERNAL://:9094,CONTROLLER://kafka3:29094
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka3:19094,EXTERNAL://localhost:9094
+      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@kafka1:29092,2@kafka2:29093,3@kafka3:29094"
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_SASL_MECHANISM_INTER_BROKER_PROTOCOL: PLAIN
+      KAFKA_SASL_ENABLED_MECHANISMS: PLAIN
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
+      KAFKA_LOG_RETENTION_BYTES: 524288000
+      KAFKA_LOG_RETENTION_HOURS: 24
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 2
+      KAFKA_LOG_DIRS: /var/lib/kafka/data
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+      KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
+      KAFKA_ALLOW_EVERYONE_IF_NO_ACL_FOUND: "true"
+      KAFKA_OPTS: "-Djava.security.auth.login.config=/etc/kafka/kafka_server_jaas.conf"
+      KAFKA_JMX_PORT: 1103
+      KAFKA_JMX_HOSTNAME: kafka3
+      KAFKA_JMX_OPTS: >-
+        -Dcom.sun.management.jmxremote=true 
+        -Dcom.sun.management.jmxremote.local.only=false 
+        -Dcom.sun.management.jmxremote.port=1103
+        -Dcom.sun.management.jmxremote.rmi.port=1103 
+        -Dcom.sun.management.jmxremote.authenticate=false 
+        -Dcom.sun.management.jmxremote.ssl=false
+    logging: *default-logging
+
+  kafka-schema-registry:
+    image: confluentinc/cp-schema-registry:7.8.0
+    restart: unless-stopped
+    hostname: kafka-schema-registry
+    container_name: kafka-schema-registry
+    networks:
+      - kafka-stack
+    ports:
+      - "8081:8081"
+    volumes:
+      - ./config/jaas/schema_registry_jaas.conf:/etc/schema-registry/schema_registry_jaas.conf:ro
+      - ./config/jaas/schema_registry_users.properties:/etc/schema-registry/schema_registry_users.properties:ro
+    environment:
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: PLAINTEXT://kafka1:19092,PLAINTEXT://kafka2:19093,PLAINTEXT://kafka3:19094
+      SCHEMA_REGISTRY_HOST_NAME: kafka-schema-registry
+      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
+      SCHEMA_REGISTRY_KAFKASTORE_SECURITY_PROTOCOL: PLAINTEXT
+      SCHEMA_REGISTRY_KAFKASTORE_SASL_MECHANISM: PLAIN
+      SCHEMA_REGISTRY_LOG4J_LOGGERS: "org.apache.kafka=ERROR,io.confluent.rest.exceptions=FATAL"
+      SCHEMA_REGISTRY_AUTHENTICATION_METHOD: BASIC
+      SCHEMA_REGISTRY_AUTHENTICATION_REALM: SchemaRegistry
+      SCHEMA_REGISTRY_AUTHENTICATION_ROLES: admin,client
+      SCHEMA_REGISTRY_AUTHORIZER_CLASS_NAME: io.confluent.kafka.schemaregistry.security.authorizer.schemaregistryauthorizer
+      SCHEMA_REGISTRY_AUTHORIZER_ADMIN_ROLES: admin
+      SCHEMA_REGISTRY_OPTS: "-Djava.security.auth.login.config=/etc/schema-registry/schema_registry_jaas.conf"
+    logging: *default-logging
+    depends_on:
+      - kafka1
+      - kafka2
+      - kafka3
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    restart: unless-stopped
+    container_name: kafka-ui
+    networks:
+      - kafka-stack
+    ports:
+      - "8085:8080"
+    environment:
+      DYNAMIC_CONFIG_ENABLED: 'true'
+      KAFKA_CLUSTERS_0_NAME: "local-kafka-cluster"
+      KAFKA_CLUSTERS_0_BOOTSTRAP_SERVERS: PLAINTEXT://kafka1:19092,PLAINTEXT://kafka2:19093,PLAINTEXT://kafka3:19094
+      KAFKA_CLUSTERS_0_PROPERTIES_SECURITY_PROTOCOL: PLAINTEXT
+      KAFKA_CLUSTERS_0_PROPERTIES_SASL_MECHANISM: PLAIN
+      KAFKA_CLUSTERS_0_SCHEMA_REGISTRY: http://kafka-schema-registry:8081
+      KAFKA_CLUSTERS_0_SCHEMA_REGISTRY_AUTH_USERNAME: client
+      KAFKA_CLUSTERS_0_SCHEMA_REGISTRY_AUTH_PASSWORD: client-secret
+      KAFKA_CLUSTERS_0_METRICS_PORT: 1101
+    logging: *default-logging
+    depends_on:
+      - kafka1
+      - kafka2
+      - kafka3
+      - kafka-schema-registry
+networks:
+  kafka-stack:
+    driver: bridge
+
+volumes:
+  kafka1_logs:
+  kafka2_logs:
+  kafka3_logs:
+
