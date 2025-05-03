@@ -1,0 +1,67 @@
+
+
+server:
+  port: 9091
+
+spring:
+  application: 
+    name: api-gateway
+  main:
+    web-application-type: reactive
+    allow-bean-definition-overriding: true
+  threads:
+    virtual:
+      enabled: true
+  data:
+    redis:
+      database: 0
+      host: localhost
+      port: 6379
+      username: ${REDIS_USER_CLIENT}
+      password: ${REDIS_PASSWORD_CLIENT}
+  kafka:
+    bootstrap-servers:
+    - localhost:9092
+    - localhost:9093
+    - localhost:9094
+    listener:
+      ack-mode: record
+      poll-timeout: 150
+    security:
+      protocol: SASL_PLAINTEXT
+    properties:
+      sasl.mechanism: SCRAM-SHA-512
+    producer:
+      acks: all
+      batch-size: 1638400
+      retries: 5
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      compression-type: snappy
+      properties:
+        spring.json.add.type.headers: false
+        request.timeout.ms: 60000
+        linger.ms: 5
+        sasl.jaas.config: >
+          org.apache.kafka.common.security.scram.ScramLoginModule required 
+          username="${KAFKA_SASL_SCRAM_PRODUCER_USERNAME}"
+          password="${KAFKA_SASL_SCRAM_PRODUCER_PASSWORD}"
+    consumer:
+      isolation-level: read-committed
+      auto-offset-reset: latest
+      group-id: "sip-api-gateway"
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.use.type.headers: false
+        spring.json.trusted.packages: "*"
+        session.timeout.ms: 10000
+        heartbeat.interval.ms: 3000
+        max.poll.interval.ms: 30000
+        max.partition.fetch.bytes: 1048576
+        sasl.jaas.config: >
+          org.apache.kafka.common.security.scram.ScramLoginModule required 
+          username="${KAFKA_SASL_SCRAM_CONSUMER_USERNAME}"
+          password="${KAFKA_SASL_SCRAM_CONSUMER_PASSWORD}"
+    
+

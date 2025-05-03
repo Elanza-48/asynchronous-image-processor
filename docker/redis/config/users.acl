@@ -1,0 +1,4 @@
+
+user sip-redis-admin on sanitize-payload #2bcdf3e322d2a2b12fc8e9524e7453c06d80da4d86589893ed58363d6419afa0 ~* &* +@all
+user sip-redis-client on sanitize-payload #539e37915c230dd077090260dabf0c517de471e7466a6fe66b98bce56ae9b9f1 ~* &* +@all -@admin -@dangerous +info
+user sip-redis-metrics on sanitize-payload #aea12d6ffa2de9a5b091bd8e69848d03dd5cb59e0952bab32633cc47b76a1e9b ~* &* -@all +latency +pfcount +scard +memory +select +llen +strlen +info +zcard +eval +cluster|info +config|get +type +ping +client +slowlog +hlen +xinfo +xlen +scan +get

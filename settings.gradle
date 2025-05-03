@@ -12,6 +12,26 @@ dependencyResolutionManagement{
   }
 }
 
-rootProject.name = 'spring-image-processor'
+def env = gradle.startParameter.projectProperties.get("env") ?: "dev"
 
+// Priority order: base < env < local
+def envFiles = [
+	file(".env"),
+	file(".env.${env}"),
+	file(".env.local")
+]
+
+envFiles.each { f ->
+	if (f.exists()) {
+		f.eachLine { line ->
+			if (!line.trim().startsWith("#") && line.contains("=")) {
+				def (key, value) = line.split("=", 2)
+				System.setProperty(key.trim(), value.trim()) // this gets picked by Spring `${}` too
+			}
+		}
+		println "✅ Loaded ${f.name}"
+	}
+}
+
+rootProject.name = 'spring-image-processor'
 include "libs", "image-processor", "api-gateway", "auth", "notification", "csv-processor"

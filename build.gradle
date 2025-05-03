@@ -28,9 +28,31 @@ subprojects {
 	apply plugin: 'org.springframework.boot'
 	apply plugin:	'io.spring.dependency-management'
 
+		dependencyManagement {
+			imports {
+				mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+			}
+		}
+
 	dependencies {
+		
+
+		implementation 'org.springframework.boot:spring-boot-starter'
+		implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+
+		implementation 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
+
 		compileOnly 'org.projectlombok:lombok'
 		testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+		annotationProcessor 'org.projectlombok:lombok'
+		annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+
+		testImplementation 'org.springframework.boot:spring-boot-starter-test'
+		testImplementation 'io.projectreactor:reactor-test'
+  	testImplementation 'org.springframework.kafka:spring-kafka-test'
+		testImplementation 'org.springframework.cloud:spring-cloud-stream-test-binder'
 	}
 
 	tasks.named('test') {
@@ -41,37 +63,26 @@ subprojects {
 
 configure([project(':api-gateway'), project(':auth'), project(':csv-processor'), project(':image-processor'), project(':notification')]) {
 
-
 	apply plugin: 'org.graalvm.buildtools.native'
-
-	dependencyManagement {
-		imports {
-			mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
-		}
-	}
 	
 	dependencies {
-		implementation 'org.springframework.boot:spring-boot-starter'
-		implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+  	implementation 'org.springframework.kafka:spring-kafka'
+		implementation 'io.projectreactor.kafka:reactor-kafka'
+
 		implementation 'org.springframework.boot:spring-boot-starter-actuator'
 		
 		implementation 'org.springframework.cloud:spring-cloud-stream'
 		implementation 'io.micrometer:micrometer-tracing-bridge-brave'
-
-		annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+	
 		developmentOnly 'org.springframework.boot:spring-boot-devtools'
 		runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
-	
-		testImplementation 'org.springframework.boot:spring-boot-starter-test'
-		testImplementation 'io.projectreactor:reactor-test'
-		testImplementation 'org.springframework.cloud:spring-cloud-stream-test-binder'
+
+		implementation project(':libs');
 	}
 
 }
 
-// project("libs") {
-// 	apply plugin: "org.gradle.toolchains.foojay-resolver-convention"
-// }
 
 configurations {
 	compileOnly {
