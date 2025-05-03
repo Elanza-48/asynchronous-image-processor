@@ -17,23 +17,23 @@ services:
       - 6379:6379
       - 8001:8001
     networks:
-      - sip-redis
-      - sip-shared
+      - aip-redis
+      - aip-shared
     environment:
       REDIS_ARGS: --include /usr/local/etc/redis/redis.conf
     volumes:
-      - sip_redis_stack_data:/data
-      - sip_redis_stack_logs:/var/log/redis
+      - aip_redis_stack_data:/data
+      - aip_redis_stack_logs:/var/log/redis
       - ./config/redis.conf:/usr/local/etc/redis/redis.conf
       - ./config/users.acl:/usr/local/etc/redis/users.acl
     logging: *default-logging
 
 networks:
-  sip-redis:
+  aip-redis:
     driver: bridge
-  sip-shared:
+  aip-shared:
     external: true
 
 volumes:
-  sip_redis_stack_data:
-  sip_redis_stack_logs:
+  aip_redis_stack_data:
+  aip_redis_stack_logs:

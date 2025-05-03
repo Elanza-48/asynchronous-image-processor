@@ -1,4 +1,4 @@
 
-user sip-redis-admin on sanitize-payload #2bcdf3e322d2a2b12fc8e9524e7453c06d80da4d86589893ed58363d6419afa0 ~* &* +@all
-user sip-redis-client on sanitize-payload #539e37915c230dd077090260dabf0c517de471e7466a6fe66b98bce56ae9b9f1 ~* &* +@all -@admin -@dangerous +info
-user sip-redis-metrics on sanitize-payload #aea12d6ffa2de9a5b091bd8e69848d03dd5cb59e0952bab32633cc47b76a1e9b ~* &* -@all +latency +pfcount +scard +memory +select +llen +strlen +info +zcard +eval +cluster|info +config|get +type +ping +client +slowlog +hlen +xinfo +xlen +scan +get
+user aip-redis-admin on sanitize-payload #9ea7ec0832ab0e6924af3a13421a70d2a8b6442927afbfa699d15437e4846479 ~* &* +@all
+user aip-redis-client on sanitize-payload #33a6ba69a52df529f4d483aab1826885e5a0e384450b4faaf12540d8d64a13f3 ~* &* +@all -@admin -@dangerous +info
+user aip-redis-metrics on sanitize-payload #63e1381d0a0beddac136962a7241b824f69f18bdd522d2848767dddd63b62b5f ~* &* -@all +latency +pfcount +scard +memory +select +llen +strlen +info +zcard +eval +cluster|info +config|get +type +ping +client +slowlog +hlen +xinfo +xlen +scan +get

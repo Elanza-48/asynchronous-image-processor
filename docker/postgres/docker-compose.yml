@@ -39,7 +39,7 @@ volumes:
   tms-grafana:
 
 networks:
-  sip-postgres-stack:
+  aip-postgres-stack:
     driver: bridge
-  sip-shared:
+  aip-shared:
     external: true

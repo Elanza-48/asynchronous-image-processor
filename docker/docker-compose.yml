@@ -2,7 +2,7 @@
 # This file documents all parts of the full stack
 # Launch using CLI with multiple -f
 
-# docker network create -d bridge sip-shared --attachable
+# docker network create -d bridge aip-shared --attachable
 
 # docker-compose \
 #   -f kafka/docker-compose.kafka.yml \

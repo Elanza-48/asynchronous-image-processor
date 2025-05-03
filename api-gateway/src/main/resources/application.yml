@@ -49,7 +49,7 @@ spring:
     consumer:
       isolation-level: read-committed
       auto-offset-reset: latest
-      group-id: "sip-api-gateway"
+      group-id: "aip-api-gateway"
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
