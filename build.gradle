@@ -61,7 +61,7 @@ subprojects {
 
 }
 
-configure([project(':api-gateway'), project(':auth'), project(':csv-processor'), project(':image-processor'), project(':notification')]) {
+configure([project(':gateway'), project(':auth'), project(':csv-processor'), project(':image-processor'), project(':notification')]) {
 
 	apply plugin: 'org.graalvm.buildtools.native'
 	

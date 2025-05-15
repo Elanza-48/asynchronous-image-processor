@@ -34,4 +34,4 @@ envFiles.each { f ->
 }
 
 rootProject.name = 'async-image-processor'
-include "libs", "image-processor", "api-gateway", "auth", "notification", "csv-processor"
+include "libs", "image-processor", "gateway", "auth", "notification", "csv-processor"
